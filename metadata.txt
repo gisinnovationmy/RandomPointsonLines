@@ -1,0 +1,22 @@
+[general]
+name=Random Point on Lines...
+qgisMinimumVersion=3.0
+description=The Random Points on Lines... is a simple interface and a user-friendly QGIS plugin that enables to generate a specified number of random points along selected line layers within QGIS. Users can control the layer selection and the number of points generated.
+version=1.0
+author=GIS Innovation Sdn. Bhd.
+email=sales@gis.fm
+
+about=Random Points on Lines... is to generate random points on line layers, enhancing spatial data analysis by quickly simulating random data points.
+
+homepage=https://gis.com.my/training/qgis-plugin/random-points-on-lines/
+tracker=https://github.com/gisinnovationmy/RandomPointsonLines/issues
+repository=https://github.com/gisinnovationmy/RandomPointsonLines
+
+tags=feature, field, layers, lines, openstreetmap, osm, points, project, python, random, select, vector
+category=Vector
+icon=icon.png
+experimental=False
+deprecated=False
+server=False
+
+changelog=1.0 - Initial release.
