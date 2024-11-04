@@ -21,16 +21,16 @@ Random Points on Lines... is to generate random points on line layers, enhancing
  *                                                                         *
  ***************************************************************************/
 """
-from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
+from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, QObject
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction
+from PyQt5.QtWidgets import QToolBar
 # Initialize Qt resources from file resources.py
 from .resources import *
-
 # Import the code for the dialog
 from .random_points_dialog import RandomPointsDialog
-import os.path
 
+import os.path
 
 class RandomPoints:
     """QGIS Plugin Implementation."""
@@ -45,9 +45,11 @@ class RandomPoints:
         """
         # Save reference to the QGIS interface
         self.iface = iface
-        # initialize plugin directory
+
+        # Initialize plugin directory
         self.plugin_dir = os.path.dirname(__file__)
-        # initialize locale
+
+        # Initialize locale
         locale = QSettings().value('locale/userLocale')[0:2]
         locale_path = os.path.join(
             self.plugin_dir,
@@ -61,10 +63,13 @@ class RandomPoints:
 
         # Declare instance attributes
         self.actions = []
-        self.menu = self.tr(u'&Random Point on Lines')
+        self.menu = self.tr(u'&Random Points on Lines...')
 
         self.pluginIsActive = False
         self.dlg = None
+
+        self.toolbar = None
+        self.action = None
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
@@ -151,13 +156,16 @@ class RandomPoints:
 
     def add_plugin_to_research_tools_menu(self, action: QAction) -> bool:
         """Add the plugin action to the existing Research Tools submenu in the Vector menu."""
-        vector_menu = self.iface.vectorMenu()  # Get the 'Vector' menu
+        # Get the 'Vector' menu
+        vector_menu = self.iface.vectorMenu()  
         research_tools_action = [
             a for a in vector_menu.findChildren(QAction) if "Research Tools" in a.text()
         ]
         if research_tools_action:
-            research_tools_menu = research_tools_action[0].menu()  # Get the 'Research Tools' submenu
-            research_tools_menu.addAction(action)  # Add your action to the submenu
+            # Get the 'Research Tools' submenu
+            research_tools_menu = research_tools_action[0].menu()  
+            # Add your action to the submenu
+            research_tools_menu.addAction(action)  
             
             # Sort the actions alphabetically
             actions = research_tools_menu.actions()
@@ -172,21 +180,35 @@ class RandomPoints:
 
     def initGui(self):
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
-        # Initialize the toolbar
-        self.toolbar = self.iface.addToolBar("RandomPointsonLine")
+        # Check if "MyTools" toolbar already exists
+        self.toolbar = self.iface.mainWindow().findChild(QToolBar, "MyTools")
+        if self.toolbar is None:
+            self.toolbar = self.iface.addToolBar("MyTools")
+            self.toolbar.setObjectName("MyTools")
 
-        icon_path = os.path.dirname(__file__) + "/icon.png"
-        action = self.add_action(
-            icon_path,
-            text=self.tr(u'Random Points on Lines...'),
-            callback=self.run,
-            parent=self.iface.mainWindow())
+        icon_path = os.path.join(os.path.dirname(__file__), "icon.png")
 
-        action.setCheckable(True)
-        action.triggered.connect(self.toggle_panel)
+        # Check if action already exists
+        action_exists = False
+        for action in self.actions:
+            if action.text() == self.tr(u'Random Points on Lines...'):
+                action_exists = True
+                break
+
+        if not action_exists:
+            self.action = self.add_action(
+                icon_path,
+                text=self.tr(u'Random Points on Lines...'),
+                callback=self.run,
+                parent=self.iface.mainWindow())
+            self.action.setCheckable(True)
+            self.action.triggered.connect(self.toggle_panel)
+
+            # Add the action to the toolbar (only if it doesn't exist)
+            self.toolbar.addAction(self.action)
 
         # Add the plugin to the Research Tools submenu under the Vector menu
-        if not self.add_plugin_to_research_tools_menu(action):
+        if not self.add_plugin_to_research_tools_menu(self.action):
             # If the Research Tools submenu is not found, add it to the toolbar or show an error if needed
             print("Error: Research Tools submenu not found in Vector menu.")
 
@@ -228,24 +250,24 @@ class RandomPoints:
             self.iface.removeToolBarIcon(action)
         # Remove the toolbar
         if self.toolbar:
-            self.iface.mainWindow().removeToolBar(self.toolbar)
+            self.toolbar.removeAction(self.action)
 
     #--------------------------------------------------------------------------
 
     def run(self):
-        """Run method that performs all the real work"""
-
         if not self.pluginIsActive:
             self.pluginIsActive = True
 
-            #print "** STARTING RandomPointsonLines..."
-
-            # dialog may not exist if:
-            #    first run of plugin
-            #    removed on close (see self.onClosePlugin method)
-            if self.dlg == None:
-                # Create the dialog (after translation) and keep reference
+            if self.dlg is None:
                 self.dlg = RandomPointsDialog()
 
-            # connect to provide cleanup on closing of dialog
             self.dlg.closingPlugin.connect(self.onClosePlugin)
+            self.dlg.closingPlugin.connect(self.uncheck_toggle)  # Connect the signal to uncheck toggle
+
+            self.dlg.show()
+
+    def uncheck_toggle(self):
+        """Uncheck the toolbar toggle when the dialog is closed."""
+        for action in self.actions:
+            if action.isCheckable():
+                action.setChecked(False)

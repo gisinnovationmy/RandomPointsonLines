@@ -1,8 +1,8 @@
 [general]
-name=Random Point on Lines...
+name=Random Points on Lines...
 qgisMinimumVersion=3.0
 description=The Random Points on Lines... is a simple interface and a user-friendly QGIS plugin that enables to generate a specified number of random points along selected line layers within QGIS. Users can control the layer selection and the number of points generated.
-version=1.0
+version=1.0.1
 author=GIS Innovation Sdn. Bhd.
 email=sales@gis.fm
 
@@ -19,4 +19,11 @@ experimental=False
 deprecated=False
 server=False
 
-changelog=1.0 - Initial release.
+changelog=1.0.1 
+          - Combined all plugins into a single toolbar created by GIS Innovation Sdn. Bhd.
+          - Enhanced the toggle feature so that clicking the button or 'X' will also turn off the toggle in the toolbar.
+          - Set the first checkable layer in the layers panel as the default layer.
+          - Corrected the plugin name from "Random Point on Lines..." to "Random Points on Lines...".
+
+          1.0.0 
+          - Initial release of the plugin.

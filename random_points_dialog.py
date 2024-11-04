@@ -26,15 +26,14 @@ import os
 import random
 
 from qgis.PyQt import uic, QtWidgets
-from qgis.core import QgsProject, QgsGeometry, QgsFeature, QgsVectorLayer, QgsPointXY, QgsWkbTypes, QgsMapLayerProxyModel
-from PyQt5.QtCore import Qt
+from qgis.core import QgsProject, QgsGeometry, QgsFeature, QgsVectorLayer, QgsPointXY, QgsWkbTypes, QgsMapLayerProxyModel, QgsField
+from PyQt5.QtCore import Qt, QVariant
 from qgis.PyQt.QtCore import pyqtSignal
 from qgis.utils import iface
 
 # Load the UI form
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'random_points_dialog_base.ui'))
-
 
 class RandomPointsDialog(QtWidgets.QDialog, FORM_CLASS):
 
@@ -50,9 +49,22 @@ class RandomPointsDialog(QtWidgets.QDialog, FORM_CLASS):
 
         # Connect signals
         self.OKCancelButton.accepted.connect(self.generate)
+        self.OKCancelButton.rejected.connect(self.cancel)
+
+        # Set default layer
+        self.setDefaultLayer()
     
         # Set window to stay on top
         self.setWindowFlags(self.windowFlags() | Qt.WindowStaysOnTopHint)
+
+    def setDefaultLayer(self):
+        """Sets the default layer to the first visible line layer."""
+        layers = QgsProject.instance().layerTreeRoot().children()
+        visible_line_layers = [layer.layer() for layer in layers if isinstance(layer.layer(), QgsVectorLayer) and layer.isVisible() and layer.layer().geometryType() == QgsWkbTypes.LineGeometry]
+
+        if visible_line_layers:
+            # Set the first visible line layer
+            self.Layer.setLayer(visible_line_layers[0])  
 
     def generate_random_points(self, line, num_points):
         """Generate random points along a given line geometry."""
@@ -62,14 +74,16 @@ class RandomPointsDialog(QtWidgets.QDialog, FORM_CLASS):
             # Interpolate a point at a random distance along the line
             distance = random.uniform(0, length)
             point = line.interpolate(distance)
-            points.append(point.asPoint())
+            points.append((point.asPoint(), distance))
         return points
 
     def generate(self):
         """Triggered when OK button is clicked to generate random points."""
         # Get selected layer and number of random points from the dialog
-        line_layer = self.Layer.currentLayer()  # Using QgsMapLayerComboBox
-        num_random_points = self.RandomPoints.value()  # Using QgsSpinBox
+        # Using QgsMapLayerComboBox
+        line_layer = self.Layer.currentLayer()  
+        # Using QgsSpinBox
+        num_random_points = self.RandomPoints.value()  
 
         # Ensure a valid line layer is selected
         if not line_layer or not line_layer.isValid() or line_layer.geometryType() != QgsWkbTypes.LineGeometry:
@@ -79,7 +93,12 @@ class RandomPointsDialog(QtWidgets.QDialog, FORM_CLASS):
         # Create a new memory layer for random points
         random_points_layer = QgsVectorLayer("Point?crs=EPSG:4326", "Random Points", "memory")
         pr = random_points_layer.dataProvider()
+        pr.addAttributes([QgsField("ID", QVariant.Int), QgsField("Distance", QVariant.Double)])
+        random_points_layer.updateFields()
         random_points_layer.startEditing()
+
+        # Initialize unique ID
+        unique_id = 1  
 
         # Iterate over each feature in the line layer and generate random points
         for feature in line_layer.getFeatures():
@@ -87,16 +106,31 @@ class RandomPointsDialog(QtWidgets.QDialog, FORM_CLASS):
             random_points = self.generate_random_points(line_geom, num_random_points)
             
             # Add each generated point as a feature to the layer
-            for point in random_points:
+            for point, distance in random_points:
                 point_feature = QgsFeature()
                 point_feature.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(point)))
-                pr.addFeatures([point_feature])
+                distance = round(line_geom.lineLocatePoint(QgsGeometry.fromPointXY(QgsPointXY(point))), 5)
+                # Set attributes
+                point_feature.setAttributes([unique_id, distance]) 
+                # Increment ID for each point
+                unique_id += 1  
+                # Add feature to the provider
+                pr.addFeatures([point_feature]) 
+
 
         # Commit changes and add the random points layer to the map
         random_points_layer.commitChanges()
         QgsProject.instance().addMapLayer(random_points_layer)
 
         iface.mapCanvas().refresh()
+
+        # Emit signal to uncheck toggle after generating points
+        self.closingPlugin.emit()
+
+    def cancel(self):
+        """Triggered when Cancel button is clicked."""
+        # Emit signal to close plugin and uncheck toggle
+        self.closingPlugin.emit()  
 
     def closeEvent(self, event):
         self.closingPlugin.emit()
