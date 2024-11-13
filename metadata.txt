@@ -1,12 +1,12 @@
 [general]
 name=Random Points on Lines...
 qgisMinimumVersion=3.0
-description=The Random Points on Lines... is a simple interface and a user-friendly QGIS plugin that enables to generate a specified number of random points along selected line layers within QGIS. Users can control the layer selection and the number of points generated.
-version=1.0.1
+description=Random Points on Lines... is to generate random points on line layers, enhancing spatial data analysis by quickly simulating random data points. 
+version=1.0.2
 author=GIS Innovation Sdn. Bhd.
-email=sales@gis.fm
+email=mygis@gis.my
 
-about=Random Points on Lines... is to generate random points on line layers, enhancing spatial data analysis by quickly simulating random data points.
+about=The Random Point on Lines... plugin allows users to generate a specified number of random points along selected line layers. It utilizes a user-friendly dialog interface to select the line layer and specify the number of random points. The resulting random points are added as a new memory layer with additional attributes, including coordinates in both the layer's CRS (XCoord_, YCoord_) and the project's CRS (XCoordProjCRS, YCoordProjCRS), as well as a distance field (Distance) indicating the distance from the start of the line to the point location. The points are customized with a size of 2.3 and a red color for better visualization.
 
 homepage=https://gis.com.my/training/qgis-plugin/random-points-on-lines/
 tracker=https://github.com/gisinnovationmy/RandomPointsonLines/issues
@@ -19,7 +19,13 @@ experimental=False
 deprecated=False
 server=False
 
-changelog=1.0.1 
+changelog=1.0.2
+          - Enhanced the description, about and documentation of the plugin.
+          - Added both the layer's CRS (XCoord_, YCoord_) and the project's CRS (XCoordProjCRS, YCoordProjCRS), along with a distance field (Distance) that shows the distance from the start of the line to each point. The points are customized for clearer visualization, with a size of 2.3 and a red color.
+          - Renamed the dialog title from "Random Points on Lines..." to "Generate Random Points Along Lines".
+          - Added columns for ID and Distance after generating random points for the selected line layers, where ID is a unique identifier for each data attribute.
+
+          1.0.1 
           - Combined all plugins into a single toolbar created by GIS Innovation Sdn. Bhd.
           - Enhanced the toggle feature so that clicking the button or 'X' will also turn off the toggle in the toolbar.
           - Set the first checkable layer in the layers panel as the default layer.
