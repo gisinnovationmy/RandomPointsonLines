@@ -10,7 +10,7 @@ The resulting random points are added as a new memory layer with additional attr
 
 The points are customized with a size of 2.3 and a red color for better visualization.
 
-The extension is available from the official repository [QGIS plugins page](https://plugins.qgis.org/plugins/). 
+The extension is available from the official repository [QGIS plugins page](https://plugins.qgis.org/plugins/random_points/). 
 
 Use the QGIS Plugins menu to install the Random Points on Lines... [QGIS manual](https://docs.qgis.org/3.34/en/docs/user_manual/plugins/plugins.html).
 
