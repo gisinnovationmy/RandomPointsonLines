@@ -33,12 +33,12 @@ Random Points on Lines... is under development and test with QGIS 3.34.
 
 ## Small Manual on How to Use the Script
 
-**1.	Loading the Plugin:**
+1.	Loading the Plugin:
 
     - Ensure that the script is correctly placed in the QGIS plugin folder.
     - Open QGIS and load the plugin. The plugin's interface should open in a dialog window.
 
-**2.	Using the Dialog Interface:**
+2.	Using the Dialog Interface:
 
     - Layer Selection: Use the dropdown to select a line layer from your project. Only line layers will be listed.
     - Number of Random Points: Enter the number of random points you want to generate along the selected line layer.
@@ -46,7 +46,7 @@ Random Points on Lines... is under development and test with QGIS 3.34.
       - **OK:** Click this button to generate the random points. The plugin will create a new memory layer containing the random points, with attributes for ID, distance along the line, and coordinates in both the layer and project CRS.
       - **Cancel:** Click this button to close the dialog without generating any points.
 
-**3.	Viewing and Analyzing the Output:**
+3.	Viewing and Analyzing the Output:
 
     - The random points will be added to the QGIS map canvas as a new layer named "Random Points."
     - The point symbols are customized with a size of 2.3 and a color of #db1e2a for clear visualization.
