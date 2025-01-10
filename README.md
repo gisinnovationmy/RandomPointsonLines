@@ -8,8 +8,6 @@ Random Points on Lines... is a user-friendly dialog interface to select the line
 
 The resulting random points are added as a new memory layer with additional attributes, including coordinates in both the layer's CRS (XCoord_, YCoord_) and the project's CRS (XCoordProjCRS, YCoordProjCRS), as well as a distance field (Distance) indicating the distance from the start of the line to the point location. 
 
-The points are customized with a size of 2.3 and a red color for better visualization.
-
 The extension is available from the official repository [QGIS plugins page](https://plugins.qgis.org/plugins/random_points/). 
 
 Use the QGIS Plugins menu to install the Random Points on Lines... [QGIS manual](https://docs.qgis.org/3.34/en/docs/user_manual/plugins/plugins.html).
@@ -40,23 +38,45 @@ Random Points on Lines... is under development and test with QGIS 3.34.
 
 2.	Using the Dialog Interface:
 
-    - Layer Selection: Use the dropdown to select a line layer from your project. Only line layers will be listed.
-    - Number of Random Points: Enter the number of random points you want to generate along the selected line layer.
-    - Buttons:
+    - **Layer Selection:** 
 
-      - **OK:** Click this button to generate the random points. The plugin will create a new memory layer containing the random points, with attributes for ID, distance along the line, and coordinates in both the layer and project CRS.
-      - **Cancel:** Click this button to close the dialog without generating any points.
+      - Use the dropdown to select a line layer from your project. 
+      - Only line layers will be listed. 
+      - Choose whether to process all features or only the selected ones.
+
+    - **Offset Settings:** 
+
+      - Adjust the sliders to configure the start and end distances for the line. 
+      - Enable the checkbox to synchronize the sliders. 
+      - To restore the default positions, click the "Reset Offsets" button.
+
+    - **Point Generation Settings:** 
+
+      - Control the randomization of points by entering a value in the "Random Seed" field. The default value is -1, and the range is 0 to 999999.
+      - Set the minimum distance between random points.
+      - Use **Dynamic Generation** to specify the number of points per feature.
+      - Enter the desired number of random points to generate along the selected line layer.
+
+    - **Buttons:**
+
+      - Generate Points: Click this button to generate the random points. The plugin will create a new memory layer containing the random points, with attributes for ID, distance along the line, and coordinates in both the layer and project CRS.
 
 3.	Viewing and Analyzing the Output:
 
-    - The random points will be added to the QGIS map canvas as a new layer named "Random Points."
-    - The point symbols are customized with a size of 2.3 and a color of #db1e2a for clear visualization.
+    - The random points will be added to the QGIS map canvas as a new layer named "Random Points".
     - Attributes include:
     
       - **ID:** A unique identifier for each point.
       - **Distance:** The distance of each point along the line.
-      - **XCoord_ & YCoord_:** Coordinates in the layer's CRS.
-      - **XCoordProjCRS & YCoordProjCRS:** Coordinates in the project’s CRS.
+      - **XCoord & YCoord:** Coordinates in the layer's CRS.
+      - **CRSXCoord & CRSYCoord:** Coordinates in the project’s CRS.
+
+
+## Tips
+
+- The field expression must return a numeric value when using dynamic generation.
+- Points are distributed randomly within the specified line segments.
+- CRS coordinates are automatically added to the output layer.
 
 
 ## Tutorial 
