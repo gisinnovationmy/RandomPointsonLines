@@ -2,7 +2,7 @@
 name=Random Points on Lines...
 qgisMinimumVersion=3.0
 description=Random Points on Lines... is to generate random points on line layers, enhancing spatial data analysis by quickly simulating random data points. 
-version=1.0.2
+version=2.0.0
 author=GIS Innovation Sdn. Bhd.
 email=mygis@gis.my
 
@@ -19,7 +19,13 @@ experimental=False
 deprecated=False
 server=False
 
-changelog=1.0.2
+changelog=2.0.0
+          - Major changes in the interface of the plugin.
+          - Introduced advanced features, including offset settings and point generation with random seed options.
+          - Improved plugin documentation.
+          - Updated dialog title from "Generate Random Points Along Lines" to "Random Points Along Line".
+
+          1.0.2
           - Enhanced the description, about and documentation of the plugin.
           - Added both the layer's CRS (XCoord_, YCoord_) and the project's CRS (XCoordProjCRS, YCoordProjCRS), along with a distance field (Distance) that shows the distance from the start of the line to each point. The points are customized for clearer visualization, with a size of 2.3 and a red color.
           - Renamed the dialog title from "Random Points on Lines..." to "Generate Random Points Along Lines".

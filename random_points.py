@@ -4,6 +4,7 @@ from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, QObject
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction
 from PyQt5.QtWidgets import QToolBar
+from qgis.utils import iface
 # Initialize Qt resources from file resources.py
 from .resources import *
 # Import the code for the dialog
@@ -238,7 +239,7 @@ class RandomPoints:
             self.pluginIsActive = True
 
             if self.dlg is None:
-                self.dlg = RandomPointsDialog()
+                self.dlg = RandomPointsDialog(iface)
 
             self.dlg.closingPlugin.connect(self.onClosePlugin)
             self.dlg.closingPlugin.connect(self.uncheck_toggle)  # Connect the signal to uncheck toggle
