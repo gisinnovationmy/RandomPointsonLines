@@ -2,8 +2,7 @@
 
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, QObject
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction
-from PyQt5.QtWidgets import QToolBar
+from qgis.PyQt.QtWidgets import QAction, QToolBar
 from qgis.utils import iface
 # Initialize Qt resources from file resources.py
 from .resources import *

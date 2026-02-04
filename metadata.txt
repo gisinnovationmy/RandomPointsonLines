@@ -1,12 +1,13 @@
 [general]
 name=Random Points on Lines...
 qgisMinimumVersion=3.0
+supportsQt6=true
 description=Random Points on Lines... is to generate random points on line layers, enhancing spatial data analysis by quickly simulating random data points. 
-version=2.0.0
+version=2.5.0
 author=GIS Innovation Sdn. Bhd.
 email=mygis@gis.my
 
-about=The Random Point on Lines... plugin allows users to generate a specified number of random points along selected line layers. It utilizes a user-friendly dialog interface to select the line layer and specify the number of random points. The resulting random points are added as a new memory layer with additional attributes, including coordinates in both the layer's CRS (XCoord_, YCoord_) and the project's CRS (XCoordProjCRS, YCoordProjCRS), as well as a distance field (Distance) indicating the distance from the start of the line to the point location. The points are customized with a size of 2.3 and a red color for better visualization.
+about=The Random Points on Lines... plugin allows users to generate a specified number of random points along selected line layers. It utilizes a user-friendly dialog interface to select the line layer and specify the number of random points. The resulting random points are added as a new temporary layer with additional attributes, including coordinates in both the layer's CRS (XCoord, YCoord) and the project's CRS (CRSXCoord, CRSYCoord), as well as a distance field (Distance) indicating the distance from the start of the line to the point location.
 
 homepage=https://gis.com.my/training/qgis-plugin/random-points-on-lines/
 tracker=https://github.com/gisinnovationmy/RandomPointsonLines/issues
@@ -19,7 +20,11 @@ experimental=False
 deprecated=False
 server=False
 
-changelog=2.0.0
+changelog=2.5.0
+          - Minor bug fixes and stability improvements.
+          - Added compatibility tests for QGIS 3.40 running on Qt6.
+          
+          2.0.0
           - Major changes in the interface of the plugin.
           - Introduced advanced features, including offset settings and point generation with random seed options.
           - Improved plugin documentation.

@@ -11,7 +11,7 @@ from qgis.core import (QgsMapLayerProxyModel, QgsVectorLayer, QgsFeature,
                       QgsFieldProxyModel, QgsLayerTreeLayer, QgsMapLayer, QgsField, QgsExpression)
 from qgis.PyQt.QtCore import Qt, QVariant, QRect, pyqtSignal
 from qgis.PyQt.QtGui import QPainter, QPalette
-from PyQt5 import QtWidgets
+from qgis.PyQt import QtWidgets
 from qgis.utils import iface
 from qgis.core import QgsExpressionContext, QgsExpressionContextUtils
 
@@ -47,7 +47,12 @@ class RandomPointsDialog(QDialog):
         # Help Button
         help_layout = QHBoxLayout()
         help_button = QPushButton()
-        help_button.setIcon(self.style().standardIcon(QStyle.SP_MessageBoxQuestion))
+        try:
+            # Qt6
+            help_button.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_MessageBoxQuestion))
+        except AttributeError:
+            # Qt5
+            help_button.setIcon(self.style().standardIcon(QStyle.SP_MessageBoxQuestion))
         help_button.setToolTip("Click for help")
         help_button.clicked.connect(self.show_help)
         help_layout.addStretch()
@@ -79,7 +84,12 @@ class RandomPointsDialog(QDialog):
         # Start slider
         start_layout = QHBoxLayout()
         start_label = QLabel("Start Offset (%)")
-        self.start_slider = QtWidgets.QSlider(Qt.Horizontal)
+        try:
+            # Qt6
+            self.start_slider = QtWidgets.QSlider(Qt.Orientation.Horizontal)
+        except AttributeError:
+            # Qt5
+            self.start_slider = QtWidgets.QSlider(Qt.Horizontal)
         self.start_slider.setRange(0, 100)
         self.start_spin = QSpinBox()
         self.start_spin.setRange(0, 100)
@@ -91,7 +101,12 @@ class RandomPointsDialog(QDialog):
         # End slider
         end_layout = QHBoxLayout()
         end_label = QLabel("End Offset (%)")
-        self.end_slider = QtWidgets.QSlider(Qt.Horizontal)
+        try:
+            # Qt6
+            self.end_slider = QtWidgets.QSlider(Qt.Orientation.Horizontal)
+        except AttributeError:
+            # Qt5
+            self.end_slider = QtWidgets.QSlider(Qt.Horizontal)
         self.end_slider.setRange(0, 100)
         self.end_slider.setInvertedAppearance(True)
         self.end_spin = QSpinBox()
@@ -179,7 +194,12 @@ class RandomPointsDialog(QDialog):
         self.generate_button.clicked.connect(self.generate_points)
         self.layer_combo.layerChanged.connect(self.field_expression.setLayer)
 
-        self.setWindowFlags(Qt.Window | Qt.WindowSystemMenuHint | Qt.WindowMinMaxButtonsHint | Qt.WindowCloseButtonHint)
+        try:
+            # Qt6
+            self.setWindowFlags(Qt.WindowType.Window | Qt.WindowType.WindowSystemMenuHint | Qt.WindowType.WindowMinMaxButtonsHint | Qt.WindowType.WindowCloseButtonHint)
+        except AttributeError:
+            # Qt5
+            self.setWindowFlags(Qt.Window | Qt.WindowSystemMenuHint | Qt.WindowMinMaxButtonsHint | Qt.WindowCloseButtonHint)
         self.resize(420, 540)  # Set initial size to 420x540 pixels
 
     def setDefaultLayer(self):
@@ -231,8 +251,15 @@ class RandomPointsDialog(QDialog):
 
     def mirror_changed(self, state):
         """Handle changes in the mirror checkbox state."""
-        self.mirroring = state == Qt.Checked
-        if state == Qt.Checked:
+        try:
+            # Qt6
+            self.mirroring = state == Qt.CheckState.Checked
+            checked = (state == Qt.CheckState.Checked)
+        except AttributeError:
+            # Qt5
+            self.mirroring = state == Qt.Checked
+            checked = (state == Qt.Checked)
+        if checked:
             # When checked, set both sliders to the same value
             value = self.start_slider.value()
             self.end_slider.blockSignals(True)
@@ -309,8 +336,14 @@ class RandomPointsDialog(QDialog):
         
     def update_field_expression_state(self, state):
         """Enable or disable the field expression widget based on dynamic point generation state."""
-        self.field_expression.setEnabled(state == Qt.Checked)
-        if state == Qt.Checked:
+        try:
+            # Qt6
+            checked = (state == Qt.CheckState.Checked)
+        except AttributeError:
+            # Qt5
+            checked = (state == Qt.Checked)
+        self.field_expression.setEnabled(checked)
+        if checked:
             self.num_points_spin.setEnabled(False)  # Disable spin box if field expression is checked
         else:
             self.num_points_spin.setEnabled(True)  # Enable spin box if field expression is unchecked
@@ -500,7 +533,12 @@ class RandomPointsDialog(QDialog):
         msg_box = QtWidgets.QMessageBox(self)
         msg_box.setWindowTitle("Help")
         msg_box.setText(help_text)
-        msg_box.exec_()
+        try:
+            # Qt6
+            msg_box.exec()
+        except AttributeError:
+            # Qt5
+            msg_box.exec_()
 
     def disable_widgets(self):
         """Disable all widgets."""
@@ -534,7 +572,3 @@ def show_dialog(iface):
     dialog = RandomPointsDialog(iface)
     dialog.show()
     return dialog
-
-# --- Script Execution ---
-# Create and show the dialog
-dialog = RandomPointsDialog(iface)
