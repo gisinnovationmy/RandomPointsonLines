@@ -1,0 +1,40 @@
+Basic Usage:
+1. Select a line layer from the dropdown
+2. Choose whether to process all features or only selected features
+3. Set the start and end offsets using the sliders
+4. Specify the number of points to generate
+
+Advanced Features:
+Offset Settings:
+- Use the sliders to control where points can be generated along the lines
+- Start Offset: Distance from the start of the line
+- End Offset: Distance from the end of the line
+- Mirror checkbox: Synchronize both sliders
+- Reset Offsets: Return sliders to default positions
+
+Point Generation Settings:
+- Random Seed: Controls the randomization of points
+  • -1: Different random points each time (default)
+  • 0-999999: Fixed seed that generates the same points each time
+- Min. Distance: Minimum distance between generated points (0 for no minimum)
+- Dynamic Generation: Use a field to determine the number of points per feature
+- Number of Points: Fixed number of points to generate per feature
+
+Random Seed Explained:
+The random seed controls how points are randomly placed along the line:
+- Using -1 (Default): Each time you generate points, they will be placed in different random positions.
+  This is useful when you want to explore different point arrangements.
+
+- Using a Fixed Seed (0-999999): Points will be placed in the exact same positions every time you
+  generate them with this seed number. This is useful when you need:
+  • Reproducible results for scientific analysis
+  • Consistent point patterns across different sessions
+  • To share exact point arrangements with colleagues
+
+Example: If you use seed = 42, the points will always be generated in the same positions as long as
+all other settings (number of points, offsets, etc.) remain the same.
+
+Tips:
+- The field expression must return a numeric value when using dynamic generation
+- Points are distributed randomly within the specified line segments
+- CRS coordinates are automatically added to the output layer
