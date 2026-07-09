@@ -10,9 +10,9 @@ The resulting random points are added as a new temporary layer with additional a
 
 The extension is available from the official repository [QGIS plugins page](https://plugins.qgis.org/plugins/random_points/). 
 
-Use the QGIS Plugins menu to install the Random Points on Lines... [QGIS manual](https://docs.qgis.org/3.34/en/docs/user_manual/plugins/plugins.html).
+Use the QGIS Plugins menu to install the Random Points on Lines... [QGIS manual](https://docs.qgis.org/3.44/en/docs/user_manual/plugins/plugins.html).
 
-Random Points on Lines... has been developed using QGIS 3.34.
+Random Points on Lines... has been developed using QGIS 4.0.
 
 
 ## Functionality
